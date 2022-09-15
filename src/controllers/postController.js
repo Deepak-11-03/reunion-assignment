@@ -28,7 +28,7 @@ const getPost =async(req,res)=>{
     try {
         let postId = req.params.id;
 
-        const post = await postModel.findById(postId).select({created_at:0,__v:0})
+        const post = await postModel.findOne({_id:postId, isDeleted: false}).select({created_at:0,__v:0})
         if(!post){
             return res.status(400).send({message:" post not found"})
         }
@@ -40,8 +40,7 @@ const getPost =async(req,res)=>{
 
 const allPost =async(req,res)=>{
     try {
-
-        const allPost =await postModel.find().select({created_at:0,__v:0}).sort({created_at:1})
+        const allPost =await postModel.find({isDeleted: false}).select({created_at:0,__v:0}).sort({created_at:1})
         return res.status(200).send({message:" All Post " , data :allPost})
         
     } catch (err) {
@@ -104,4 +103,24 @@ const comments =async(req,res)=>{
     }
 }
 
-module.exports={createPost,getPost,allPost,like,unLike,comments}
+const deletePost =async(req,res)=>{
+   try {
+    const postId = req.params.id;
+
+    let post = await postModel.findOne({_id:postId , isDeleted:false})
+
+    if(!post){
+        return res.status(400).send({message:"post not found"})
+    }
+
+    post.isDeleted = true;
+    post.save();
+
+    return res.send({message:"post deleted"})
+   }  catch (err) {
+    return res.status(500).send({error: err.message });
+}
+
+}
+
+module.exports={createPost,getPost,allPost,like,unLike,comments,deletePost}

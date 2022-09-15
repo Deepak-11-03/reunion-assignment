@@ -7,7 +7,11 @@ const postSchema =mongoose.Schema({
     comments:[String],
     likes:{type:Number ,default:0},
     unLikes:{type:Number ,default:0},
-    created_at:{type:String , default:new Date().toLocaleString()}
+    created_at:{type:String , default:new Date().toLocaleString()},
+    isDeleted:{
+        type:Boolean,
+        default:false
+    }
 })
 
 module.exports =mongoose.model('Post', postSchema)

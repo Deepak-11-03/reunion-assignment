@@ -13,13 +13,14 @@ router.put('/api/unfollow', auth.auth, userController.unFollow)
 
 
 
-router.post('/api/posts' , postController.createPost)
+router.post('/api/posts' ,auth.auth, postController.createPost)
 // router.post('/api/follow/:id' , userController)
 router.get('/api/posts/:id' , postController.getPost)
 router.get('/api/all_posts' , postController.allPost)
-router.put('/api/like/:id' , postController.like)
-router.put('/api/unlike/:id' , postController.unLike)
-router.put('/api/comments/:id' , postController.comments)
+router.put('/api/like/:id' , auth.auth,postController.like)
+router.put('/api/unlike/:id' ,auth.auth, postController.unLike)
+router.put('/api/comments/:id' ,auth.auth, postController.comments)
+router.delete('/api/posts/:id' , auth.auth , postController.deletePost)
 
 
 module.exports =router
